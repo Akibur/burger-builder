@@ -1,5 +1,5 @@
 import classes from './App.module.css';
-import Layout from '../components/Layout/Layout';
+import Layout from '../hoc/Layout/Layout';
 import BurgerBuilder from './BurgerBuilder/BurgerBuilder';
 
 
