@@ -7,7 +7,8 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
-import axios from 'axios';
+import withErrorHandler from './../../hoc/withErrorHandler/withErrorHandler';
+import axios from './../../axios-orders';
 
 
 
@@ -20,7 +21,7 @@ const INGREDIENT_PRICE = {
 
 
 
-class burgerBuilder extends Component {
+class BurgerBuilder extends Component {
     // constructor(props) {
     //     super(props);
     //     this.state = {};
@@ -101,30 +102,17 @@ class burgerBuilder extends Component {
     };
 
     purchaseContinueHandler = () => {
-        this.setState({ loading: true });
-
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Akibur Rahman',
-                address: {
-                    street: 'Teststreet 1',
-                    zipCode: '41351',
-                    country: 'Bangladdesh'
-                },
-                email: 'test@test.com'
-            },
-            deliveryMethod: 'fastest'
-        };
-
-        axios.post("orders.json", order)
-            .then(res => {
-                this.setState({ loading: false, purchasing: false });
-            })
-            .catch(err => {
-                this.setState({ loading: false, purchasing: false });
-            });
+        const queryParams = [];
+        for (let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+        }
+        console.log(queryParams);
+        queryParams.push('price=' + this.state.totalPrice);
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
+        });
 
     };
 
@@ -180,4 +168,4 @@ class burgerBuilder extends Component {
     }
 }
 
-export default burgerBuilder;
+export default withErrorHandler(BurgerBuilder, axios);
