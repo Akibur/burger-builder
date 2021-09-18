@@ -9,7 +9,9 @@ function BuildControl(props) {
                 {props.label}
             </div>
             <button className={classes.More} onClick={props.ingredientAdded} >More</button>
-            <button className={classes.Less} onClick={props.ingredientRemoved}>Less</button>
+            <button className={classes.Less}
+                disabled={props.disabled}
+                onClick={props.ingredientRemoved}>Less</button>
         </div>
     );
 }
